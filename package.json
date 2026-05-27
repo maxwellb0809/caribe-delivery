@@ -1,0 +1,17 @@
+{
+  "name": "caribe-delivery-mesh",
+  "version": "1.0.0",
+  "description": "Simulador de Malla de Agentes y Comprobantes Fiscales para Caribe Delivery",
+  "scripts": {
+    "dev": "npx -y http-server -p 8080 -c-1"
+  },
+  "keywords": [
+    "caribe",
+    "delivery",
+    "stitch",
+    "mesh",
+    "simulador"
+  ],
+  "author": "Antigravity Agent",
+  "license": "ISC"
+}

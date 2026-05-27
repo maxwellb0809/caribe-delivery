@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Caribe Delivery | Panel de Operaciones</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="index.css" />
+</head>
+
+<body>
+
+  <div class="app-container">
+
+    <!-- HEADER -->
+    <header class="app-header">
+
+      <div class="header-logo">
+        <div class="logo-icon"></div>
+
+        <div class="logo-text">
+          <h1>CARIBE DELIVERY</h1>
+          <span class="logo-subtitle">
+            Panel de Operaciones Logísticas
+          </span>
+        </div>
+      </div>
+
+      <div class="system-stats">
+
+        <div class="stat-badge">
+          <span class="badge-dot pulse-green"></span>
+
+          <div>
+            <span class="badge-label">
+              Sistema
+            </span>
+
+            <span class="badge-value text-green">
+              Operando correctamente
+            </span>
+          </div>
+        </div>
+
+        <div class="stat-badge">
+          <span class="badge-dot pulse-amber"></span>
+
+          <div>
+            <span class="badge-label">
+              Entregas hoy
+            </span>
+
+            <span class="badge-value">
+              42 entregas registradas
+            </span>
+          </div>
+        </div>
+
+        <div class="stat-badge clock-badge">
+          <span class="clock-icon"></span>
+          <span id="live-clock">00:00:00</span>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="workspace-grid">
+
+      <!-- LEFT -->
+      <section class="left-column">
+
+        <!-- OVERVIEW -->
+        <div class="card overview-card">
+
+          <div class="card-header">
+            <div class="card-icon"></div>
+
+            <div class="card-title">
+              <h2>Resumen del sistema</h2>
+              <p>
+                Estado general de las operaciones
+              </p>
+            </div>
+          </div>
+
+          <div class="overview-grid">
+
+            <div class="overview-item">
+              <span class="overview-icon"></span>
+              <h3>128</h3>
+              <p>Envíos activos</p>
+            </div>
+
+            <div class="overview-item">
+              <span class="overview-icon"></span>
+              <h3>18</h3>
+              <p>Conductores disponibles</p>
+            </div>
+
+            <div class="overview-item">
+              <span class="overview-icon"></span>
+              <h3>94%</h3>
+              <p>Entregas exitosas</p>
+            </div>
+
+            <div class="overview-item">
+              <span class="overview-icon"></span>
+              <h3>12</h3>
+              <p>Vehículos en ruta</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- TRACKING -->
+        <div class="card map-card">
+
+          <div class="card-header">
+
+            <div class="card-icon">
+              
+            </div>
+
+            <div class="card-title">
+              <h2>Seguimiento de envíos</h2>
+
+              <p>
+                Monitoreo de transporte en tiempo real
+              </p>
+            </div>
+
+            <div id="geofence-alert" class="geofence-alert-badge hidden">
+              📍 Vehículo ingresó a una zona monitoreada
+            </div>
+
+          </div>
+
+          <div class="card-body map-viewport">
+
+            <svg
+              class="dr-svg-map"
+              viewBox="0 0 800 450"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+
+              <defs>
+
+                <radialGradient id="ocean-glow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#f8fafc" />
+                  <stop offset="100%" stop-color="#e2e8f0" />
+                </radialGradient>
+
+                <filter id="shadow">
+                  <feDropShadow
+                    dx="0"
+                    dy="6"
+                    stdDeviation="8"
+                    flood-opacity="0.10"
+                  />
+                </filter>
+
+              </defs>
+
+              <rect
+                width="100%"
+                height="100%"
+                fill="url(#ocean-glow)"
+              />
+
+              <!-- RD -->
+              <path
+                class="dr-land-path"
+                d="M 60,250 C 90,240 140,240 180,220
+                C 220,200 270,180 320,170
+                C 370,160 450,150 510,130
+                C 560,110 610,90 660,120
+                C 700,140 760,150 780,180
+                C 790,200 780,240 760,270
+                C 740,290 700,320 650,330
+                C 600,340 550,330 500,350
+                C 460,370 410,380 370,370
+                C 330,360 280,310 240,300
+                C 200,290 140,330 110,330
+                C 80,330 65,300 50,280
+                C 40,260 50,255 60,250 Z"
+              />
+
+              <!-- Rutas -->
+              <path
+                id="route-santiago"
+                class="highway-path"
+                d="M 430,295 Q 380,230 335,180"
+              />
+
+              <path
+                id="route-puntacana"
+                class="highway-path"
+                d="M 430,295
+                C 500,310 600,290 715,245"
+              />
+
+              <!-- Santo Domingo -->
+              <g
+                class="city-marker sd-hub"
+                transform="translate(430,295)"
+              >
+                <circle class="marker-glow" r="18"></circle>
+                <circle class="marker-core" r="6"></circle>
+
+                <text y="-14" class="marker-label">
+                  Santo Domingo
+                </text>
+              </g>
+
+              <!-- Santiago -->
+              <g
+                class="city-marker"
+                transform="translate(335,180)"
+              >
+                <circle class="marker-glow" r="14"></circle>
+                <circle class="marker-core" r="5"></circle>
+
+                <text y="-14" class="marker-label">
+                  Santiago
+                </text>
+              </g>
+
+              <!-- Punta Cana -->
+              <g
+                class="city-marker"
+                transform="translate(715,245)"
+              >
+                <circle class="marker-glow" r="14"></circle>
+                <circle class="marker-core" r="5"></circle>
+
+                <text y="-14" class="marker-label">
+                  Punta Cana
+                </text>
+              </g>
+
+              <!-- Vehículo -->
+              <g
+                id="truck-marker"
+                class="truck-marker-group invisible"
+              >
+                <circle class="truck-glow" r="12"></circle>
+
+                <rect
+                  class="truck-body"
+                  x="-6"
+                  y="-6"
+                  width="12"
+                  height="12"
+                  rx="3"
+                ></rect>
+
+                <text
+                  class="truck-label"
+                  x="12"
+                  y="4"
+                  id="truck-marker-id"
+                >
+                  CD-01
+                </text>
+              </g>
+
+            </svg>
+
+            <!-- TELEMETRY -->
+            <div class="telemetry-bar">
+
+              <div class="tel-item">
+                <span class="tel-lbl">
+                  Vehículo
+                </span>
+
+                <span
+                  class="tel-val"
+                  id="tel-truck-id"
+                >
+                  En ruta
+                </span>
+              </div>
+
+              <div class="tel-item">
+                <span class="tel-lbl">
+                  Ubicación
+                </span>
+
+                <span
+                  class="tel-val text-mono"
+                  id="tel-lat"
+                >
+                  Santo Domingo
+                </span>
+              </div>
+
+              <div class="tel-item">
+                <span class="tel-lbl">
+                  Velocidad
+                </span>
+
+                <span
+                  class="tel-val"
+                  id="tel-speed"
+                >
+                  60 km/h
+                </span>
+              </div>
+
+              <div class="tel-item">
+                <span class="tel-lbl">
+                  Estado
+                </span>
+
+                <span
+                  class="tel-val"
+                  id="tel-geofence"
+                >
+                  Ruta activa
+                </span>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="card actions-card">
+
+          <div class="card-header">
+
+            <div class="card-icon">
+              
+            </div>
+
+            <div class="card-title">
+              <h2>Acciones rápidas</h2>
+              <p>
+                Gestiona operaciones comunes rápidamente
+              </p>
+            </div>
+
+          </div>
+
+          <div class="quick-actions-grid">
+
+            <button class="quick-cmd-btn">
+               Registrar envío
+            </button>
+
+            <button class="quick-cmd-btn">
+              Seguimiento
+            </button>
+
+            <button class="quick-cmd-btn">
+               Facturación
+            </button>
+
+            <button class="quick-cmd-btn">
+               Conductores
+            </button>
+
+            <button class="quick-cmd-btn">
+               Reportes
+            </button>
+
+            <button class="quick-cmd-btn">
+               Configuración
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- RIGHT COLUMN -->
+      <section class="right-column">
+
+                <!-- COTIZACIÓN Y FACTURACIÓN -->
+        <div class="card billing-card">
+
+          <div class="card-header">
+
+            <div class="card-icon">
+              
+            </div>
+
+            <div class="card-title">
+              <h2>Registrar envío</h2>
+              <p>
+                Calcula costos y registra nuevos envíos
+              </p>
+            </div>
+
+          </div>
+
+          <div class="card-body billing-layout">
+
+            <!-- FORM -->
+            <div class="billing-config-row">
+
+              <div class="input-group">
+                <label for="package-weight">
+                  Peso del paquete
+                </label>
+
+                <input
+                  type="number"
+                  id="package-weight"
+                  value="15"
+                  min="1"
+                  max="500"
+                />
+
+                <span class="input-hint">
+                  Ingresa el peso aproximado en libras
+                </span>
+              </div>
+
+              <div class="input-group">
+                <label for="package-value">
+                  Valor declarado (RD$)
+                </label>
+
+                <input
+                  type="number"
+                  id="package-value"
+                  value="2500"
+                  min="0"
+                />
+
+                <span class="input-hint">
+                  Usado para control y facturación
+                </span>
+              </div>
+
+              <div class="input-group">
+                <label for="package-dest">
+                  Ciudad de destino
+                </label>
+
+                <select id="package-dest">
+                  <option value="R-01">
+                    Santiago
+                  </option>
+
+                  <option value="R-02">
+                    Punta Cana
+                  </option>
+                </select>
+
+                <span class="input-hint">
+                  Selecciona el destino del envío
+                </span>
+              </div>
+
+            </div>
+
+            <!-- RECEIPT -->
+            <div class="receipt-preview">
+
+              <div class="receipt-header">
+                <h3>Resumen del envío</h3>
+
+                <p>
+                  Vista rápida del costo estimado
+                </p>
+              </div>
+
+              <div class="receipt-body">
+
+                <div class="receipt-line">
+                  <span>
+                    Tarifa base
+                  </span>
+
+                  <span id="bill-base">
+                    RD$ 350.00
+                  </span>
+                </div>
+
+                <div class="receipt-line">
+                  <span>
+                    Costo adicional por peso
+                    (<span id="bill-w-lbl">15</span> lbs)
+                  </span>
+
+                  <span id="bill-weight-extra">
+                    RD$ 150.00
+                  </span>
+                </div>
+
+                <div class="receipt-line divider"></div>
+
+                <div class="receipt-line">
+                  <span>
+                    Subtotal
+                  </span>
+
+                  <span id="bill-subtotal">
+                    RD$ 500.00
+                  </span>
+                </div>
+
+                <div class="receipt-line">
+                  <span>
+                    Impuestos
+                  </span>
+
+                  <span id="bill-itbis">
+                    RD$ 90.00
+                  </span>
+                </div>
+
+                <div class="receipt-line total-line">
+                  <span>
+                    Total estimado
+                  </span>
+
+                  <span id="bill-total">
+                    RD$ 590.00
+                  </span>
+                </div>
+
+                <div class="receipt-line ncf-line">
+                  <span>
+                    Código de referencia
+                  </span>
+
+                  <strong
+                    class="text-green"
+                    id="bill-ncf"
+                  >
+                    CD-000043
+                  </strong>
+                </div>
+
+              </div>
+
+              <button class="send-cmd-btn">
+                Registrar envío
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- HISTORIAL -->
+        <div class="card ledger-container">
+
+          <div class="card-header">
+
+            <div class="card-icon">
+              
+            </div>
+
+            <div class="card-title">
+              <h2>Historial de envíos</h2>
+
+              <p>
+                Consulta entregas registradas
+              </p>
+            </div>
+
+          </div>
+
+          <div class="ledger-header">
+
+            <span
+              class="ledger-count-label"
+              id="tbl-row-count"
+            >
+              2 envíos registrados
+            </span>
+
+          </div>
+
+          <div class="ledger-scroll">
+
+            <table class="ledger-table">
+
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Destino</th>
+                  <th>Peso</th>
+                  <th>Costo</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+
+              <tbody id="ledger-table-body">
+
+                <tr>
+                  <td>
+                    CD-000041
+                  </td>
+
+                  <td>
+                    Santiago
+                  </td>
+
+                  <td>
+                    8 lbs
+                  </td>
+
+                  <td>
+                    RD$ 448.40
+                  </td>
+
+                  <td>
+                    <span class="status-pill delivered">
+                      Entregado
+                    </span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    CD-000042
+                  </td>
+
+                  <td>
+                    Punta Cana
+                  </td>
+
+                  <td>
+                    22 lbs
+                  </td>
+
+                  <td>
+                    RD$ 672.60
+                  </td>
+
+                  <td>
+                    <span class="status-pill intransit">
+                      En ruta
+                    </span>
+                  </td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+        <!-- CONDUCTORES -->
+        <div class="card security-card">
+
+          <div class="card-header">
+
+            <div class="card-icon">
+              
+            </div>
+
+            <div class="card-title">
+              <h2>Conductores</h2>
+
+              <p>
+                Estado del personal de transporte
+              </p>
+            </div>
+
+            <div
+              id="jwt-audit-alert"
+              class="jwt-alert-badge hidden"
+            >
+               Atención requerida
+            </div>
+
+          </div>
+
+          <div class="card-body security-layout">
+
+            <div class="driver-profile-row">
+
+              <div class="driver-avatar">
+                👨‍✈️
+              </div>
+
+              <div class="driver-details">
+
+                <h3 id="drv-name">
+                  Juan Pérez
+                </h3>
+
+                <p>
+                  Vehículo asignado:
+                  <span
+                    class="text-white"
+                    id="drv-truck"
+                  >
+                    CD-01
+                  </span>
+                </p>
+
+              </div>
+
+              <div class="driver-jwt-status">
+
+                <span
+                  class="status-pill jwt-active"
+                  id="jwt-badge-status"
+                >
+                  Disponible
+                </span>
+
+              </div>
+
+            </div>
+
+            <div class="token-grid">
+
+              <div class="token-data-box">
+
+                <span class="box-lbl">
+                  Estado de sesión
+                </span>
+
+                <span
+                  class="box-val"
+                  id="jwt-signature"
+                >
+                  Sesión activa
+                </span>
+
+              </div>
+
+              <div class="token-timer-box">
+
+                <span class="box-lbl">
+                  Tiempo disponible
+                </span>
+
+                <span
+                  class="box-val text-green"
+                  id="jwt-ttl"
+                >
+                  Disponible
+                </span>
+
+              </div>
+
+            </div>
+
+            <div class="security-controls">
+
+              <button
+                class="sec-action-btn rotate-keys"
+                id="btn-rotate-keys"
+              >
+                Actualizar estado
+              </button>
+
+              <button
+                class="sec-action-btn corrupt-token"
+                id="btn-corrupt-token"
+              >
+                Verificar conductor
+              </button>
+
+            </div>
+
+            <div class="auditor-micro-logs">
+
+              <span class="audit-hdr">
+                Actividad reciente
+              </span>
+
+              <div
+                class="audit-scroll"
+                id="audit-logs-list"
+              >
+
+                <div class="audit-log-line">
+                   Vehículo CD-01 asignado correctamente
+                </div>
+
+                <div class="audit-log-line">
+                   Ruta actualizada para entrega
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <script src="app.js"></script>
+
+</body>
+</html>
